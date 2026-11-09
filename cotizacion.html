@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Cotización | Plastiservi</title>
+  <meta name="description" content="Revisa y envía tu cotización de productos Plastiservi. Respuesta a la brevedad." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" /><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" /></noscript>
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
+  <link rel="stylesheet" href="css/style.css?v=1794227483" />
+  <style>
+    /* ── Hero bar ── */
+    .cot-hero {
+      background: var(--navy);
+      padding: 160px 0 36px;
+    }
+    .cot-hero-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+      flex-wrap: wrap;
+    }
+    .cot-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12.5px; color: rgba(255,255,255,.5); text-decoration: none;
+      margin-bottom: 10px; transition: color .18s;
+    }
+    .cot-back:hover { color: rgba(255,255,255,.9); }
+    .cot-back svg { width: 14px; height: 14px; }
+    .cot-hero h1 { color: #fff; font-size: clamp(26px,3.5vw,38px); margin: 0; }
+    .cot-hero-subtitle { color: rgba(255,255,255,.5); font-size: 14px; margin-top: 4px; }
+    /* Steps */
+    .cot-steps { display: flex; align-items: center; gap: 0; }
+    .cot-step {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: rgba(255,255,255,.4); font-weight: 500;
+    }
+    .cot-step-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .cot-step.active { color: #fff; }
+    .cot-step.active .cot-step-num { background: var(--orange); border-color: var(--orange); }
+    .cot-step.done { color: rgba(255,255,255,.6); }
+    .cot-step.done .cot-step-num { background: rgba(255,255,255,.15); border-color: transparent; }
+    .cot-step-line { width: 28px; height: 1px; background: rgba(255,255,255,.15); margin: 0 6px; }
+
+    /* ── Layout ── */
+    .cot-wrap {
+      max-width: 1100px; margin: 0 auto; padding: 36px 24px 80px;
+      display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start;
+    }
+
+    /* ── Left: items ── */
+    .cot-items-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+    }
+    .cot-items-header h2 { font-size: 17px; margin: 0; }
+    .cot-clear-btn {
+      background: none; border: none; cursor: pointer; font-size: 12px;
+      color: var(--text-3); font-family: 'Inter', sans-serif;
+      text-decoration: underline; transition: color .18s;
+    }
+    .cot-clear-btn:hover { color: #c00; }
+    .cot-items { display: flex; flex-direction: column; gap: 10px; }
+    .cot-item {
+      background: #fff; border: 1.5px solid var(--border); border-radius: var(--r-lg);
+      padding: 16px 18px; display: flex; align-items: center; gap: 14px;
+      transition: border-color .18s, box-shadow .18s;
+      animation: ci-in .25s ease forwards;
+    }
+    @keyframes ci-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+    .cot-item:hover { border-color: rgba(232,92,26,.2); box-shadow: 0 2px 12px rgba(0,0,0,.05); }
+    .cot-item-thumb {
+      width: 88px; height: 88px; border-radius: var(--r); flex-shrink: 0;
+      background: #f8f7f4; overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .cot-item-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+    .cot-item-thumb svg { width: 28px; height: 28px; opacity: .18; }
+    .cot-item-info { flex: 1; min-width: 0; }
+    .cot-item-name { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+    .cot-item-meta { font-size: 12px; color: var(--text-3); margin-bottom: 6px; }
+    .cot-item-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .cot-item-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+      background: var(--off); color: var(--text-2); padding: 2px 7px; border-radius: 100px;
+    }
+    .cot-item-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .cot-qty-btn {
+      width: 30px; height: 30px; border: 1.5px solid var(--border); border-radius: 8px;
+      background: #fff; font-size: 16px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; transition: border-color .15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .cot-qty-btn:hover { border-color: var(--navy); }
+    .cot-qty-input {
+      width: 46px; height: 30px; border: 1.5px solid var(--border); border-radius: 8px;
+      text-align: center; font-size: 14px; font-weight: 700;
+      font-family: 'Inter', sans-serif; color: var(--navy); outline: none;
+    }
+    .cot-qty-input:focus { border-color: var(--orange); }
+    .cot-item-remove {
+      background: none; border: none; cursor: pointer; color: var(--text-3);
+      padding: 4px; border-radius: 6px; transition: color .15s, background .15s; margin-left: 2px;
+    }
+    .cot-item-remove:hover { color: #c00; background: rgba(200,0,0,.06); }
+
+    .cot-more-btn {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
+      font-size: 13.5px; font-weight: 600; color: var(--orange); text-decoration: none;
+      padding: 10px 18px; border: 1.5px solid rgba(232,92,26,.25);
+      border-radius: var(--r); transition: background .18s, border-color .18s;
+    }
+    .cot-more-btn:hover { background: rgba(232,92,26,.06); border-color: var(--orange); }
+    .cot-more-btn svg { width: 16px; height: 16px; }
+
+    /* Summary strip */
+    .cot-summary-strip {
+      background: #fff; border: 1.5px solid var(--border); border-radius: var(--r-lg);
+      padding: 16px 20px; margin-top: 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .css-label { font-size: 13px; color: var(--text-2); }
+    .css-value { font-size: 15px; font-weight: 700; color: var(--navy); }
+
+    /* ── Right: form ── */
+    .cot-form-card {
+      background: #fff; border: 1.5px solid var(--border); border-radius: var(--r-lg);
+      overflow: hidden; position: sticky; top: 80px;
+    }
+    .cot-form-header {
+      background: var(--navy); padding: 20px 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .cot-form-header svg { width: 20px; height: 20px; color: var(--orange); flex-shrink: 0; }
+    .cot-form-header h3 { font-size: 16px; color: #fff; margin: 0; }
+    .cot-form-header p { font-size: 12px; color: rgba(255,255,255,.5); margin: 2px 0 0; }
+    .cot-form-body { padding: 22px 24px; display: flex; flex-direction: column; gap: 14px; }
+    .cot-field { display: flex; flex-direction: column; gap: 5px; }
+    .cot-field label {
+      font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+      text-transform: uppercase; color: var(--text-3);
+    }
+    .cot-field label .req { color: var(--orange); }
+    .cot-field input, .cot-field textarea, .cot-field select {
+      border: 1.5px solid var(--border); border-radius: var(--r);
+      padding: 10px 12px; font-size: 14px; font-family: 'Inter', sans-serif;
+      color: var(--text); outline: none; background: var(--off);
+      transition: border-color .18s, background .18s;
+    }
+    .cot-field select {
+      -webkit-appearance: none; appearance: none; cursor: pointer;
+      padding-right: 36px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+    }
+    .cot-field input:focus, .cot-field textarea:focus, .cot-field select:focus {
+      border-color: var(--orange); background: #fff;
+    }
+    .cot-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .cot-trust {
+      display: flex; flex-direction: column; gap: 6px;
+      padding: 14px 16px; background: var(--off); border-radius: var(--r);
+    }
+    .cot-trust-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--text-2);
+    }
+    .cot-trust-item svg { width: 14px; height: 14px; color: #1a9145; flex-shrink: 0; }
+    .cot-submit-btn {
+      width: 100%; padding: 14px; background: var(--orange); color: #fff;
+      border: none; border-radius: var(--r); font-size: 15px; font-weight: 700;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background .18s, transform .15s;
+    }
+    .cot-submit-btn:hover:not(:disabled) { background: var(--orange-2); transform: translateY(-1px); }
+    .cot-submit-btn:disabled { background: var(--border); color: var(--text-3); cursor: not-allowed; transform: none; }
+    .cot-submit-btn svg { width: 17px; height: 17px; }
+
+    /* Success state */
+    .cot-success {
+      display: none; padding: 48px 24px; text-align: center;
+    }
+    .cot-success-icon {
+      width: 64px; height: 64px; background: rgba(26,145,69,.1);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .cot-success-icon svg { width: 30px; height: 30px; color: #1a9145; }
+    .cot-success h3 { font-size: 20px; color: var(--navy); margin-bottom: 8px; }
+    .cot-success p { font-size: 14px; color: var(--text-2); line-height: 1.7; }
+
+    /* Empty state */
+    .cot-empty {
+      background: #fff; border: 1.5px solid var(--border); border-radius: var(--r-lg);
+      padding: 64px 32px; text-align: center;
+    }
+    .cot-empty-icon { width: 72px; height: 72px; background: var(--off); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+    .cot-empty-icon svg { width: 32px; height: 32px; opacity: .3; }
+    .cot-empty h3 { font-size: 20px; margin-bottom: 8px; }
+    .cot-empty p { font-size: 14px; color: var(--text-2); margin-bottom: 24px; }
+
+    @media (max-width: 860px) {
+      .cot-wrap { grid-template-columns: 1fr; }
+      .cot-form-card { position: static; }
+      .cot-row { grid-template-columns: 1fr; }
+      .cot-steps { display: none; }
+    }
+    @media (max-width: 500px) {
+      .cot-item-thumb { width: 48px; height: 48px; }
+    }
+  </style>
+  <meta name="robots" content="noindex,follow" />
+  <link rel="canonical" href="https://plastiservi.cl/cotizacion.html" />
+  <link rel="alternate" hreflang="es-CL" href="https://plastiservi.cl/cotizacion.html" />
+  <link rel="alternate" hreflang="x-default" href="https://plastiservi.cl/cotizacion.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_CL" />
+  <meta property="og:site_name" content="Plastiservi" />
+  <meta property="og:title" content="Mi Cotización | Plastiservi" />
+  <meta property="og:description" content="Revisa y envía tu cotización de productos Plastiservi. Respuesta a la brevedad." />
+  <meta property="og:url" content="https://plastiservi.cl/cotizacion.html" />
+  <meta property="og:image" content="https://plastiservi.cl/img/og-plastiservi.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mi Cotización | Plastiservi" />
+  <meta name="twitter:description" content="Revisa y envía tu cotización de productos Plastiservi. Respuesta a la brevedad." />
+  <meta name="twitter:image" content="https://plastiservi.cl/img/og-plastiservi.jpg" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://plastiservi.cl/#org", "name": "Plastiservi S.A.", "url": "https://plastiservi.cl", "logo": "https://plastiservi.cl/img/logo.png", "foundingDate": "1984", "sameAs": ["https://cl.linkedin.com/in/plastiservi-s-a-836a032b4"]}]}</script>
+</head>
+<body data-line="tubos">
+  <a class="skip" href="#main">Saltar al contenido</a>
+
+    <header class="nav" id="nav">
+    <div class="nav-top"><div class="nav-top-inner">
+      <div class="logo-group"><a href="index.html" class="logo"><img width="1563" height="416" src="img/logo-sin-tagline.png" alt="Plastiservi" class="logo-img" /></a></div>
+      <form class="nav-search" onsubmit="handleSearch(event)">
+        <input type="search" placeholder="Buscar bolsas, film, tuberías, acoples PVC..." class="nav-search-input" />
+        <button type="submit" class="nav-search-btn" aria-label="Buscar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+      </form>
+      <a href="contacto.html" class="nav-cta"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Cotizar</a>
+      <a href="cotizacion.html" class="nav-cart-btn" id="nav-cart" aria-label="Ver cotización"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="nav-cart-count" id="cart-count" style="display:none">0</span></a>
+      <button class="burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
+    </div></div>
+    <div class="nav-bottom"><div class="nav-bottom-inner"><nav class="nav-links">
+      <a href="index.html" class="nav-link">Inicio</a>
+      <a href="tuberias.html" class="nav-link nav-line nav-line-tubos active">Tubos y acoples</a>
+      <a href="envases-flexibles.html" class="nav-link nav-line nav-line-bolsas">Bolsas y mangas</a>
+      <a href="reciclaje.html" class="nav-link">Reciclaje</a>
+      <a href="nosotros.html" class="nav-link">Nosotros</a>
+      <a href="industrias.html" class="nav-link">Industrias</a>
+      <a href="contacto.html" class="nav-link">Contacto</a>
+    </nav></div></div>
+    <div class="nav-drawer" id="drawer">
+      <a href="index.html">Inicio</a>
+      <a href="tuberias.html">Tubos y acoples</a>
+      <a href="envases-flexibles.html">Bolsas y mangas</a>
+      <a href="reciclaje.html">Reciclaje</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="industrias.html">Industrias</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+  </header>
+
+  <main style="background: var(--off); min-height: 70vh;">
+
+    <!-- Hero bar -->
+    <div class="cot-hero">
+      <div class="cot-hero-inner">
+        <div>
+          <a href="productos.html" class="cot-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+            Volver al catálogo
+          </a>
+          <h1>Tu cotización</h1>
+          <p class="cot-hero-subtitle" id="hero-subtitle">Cargando...</p>
+        </div>
+        <div class="cot-steps">
+          <div class="cot-step done">
+            <div class="cot-step-num">✓</div>
+            <span>Elige</span>
+          </div>
+          <div class="cot-step-line"></div>
+          <div class="cot-step active">
+            <div class="cot-step-num">2</div>
+            <span>Cotiza</span>
+          </div>
+          <div class="cot-step-line"></div>
+          <div class="cot-step">
+            <div class="cot-step-num">3</div>
+            <span>Recibe respuesta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="cot-wrap" id="cot-wrap">
+      <div style="text-align:center;padding:60px 0;color:var(--text-3)">Cargando cotización...</div>
+    </div>
+
+  </main>
+
+  <footer class="footer"><div class="container">
+    <div class="footer-top">
+      <div>
+        <a href="index.html" style="display:inline-flex;margin-bottom:14px;"><img loading="lazy" decoding="async" width="1563" height="416" src="img/logo-sin-tagline.png" alt="Plastiservi" style="height:52px;width:auto" /></a>
+        <p>Empresa familiar chilena con más de 42 años en el mercado del plástico. Bolsas y mangas, tubos PVC y cañerías, reciclaje.</p>
+      </div>
+      <div class="footer-cols">
+        <div><h3 class="fh">Empresa</h3><a href="nosotros.html">Quiénes somos</a><a href="reciclaje.html">Reciclaje</a><a href="industrias.html">Industrias</a><a href="contacto.html">Contacto</a><a href="fichas/codigo-de-etica-y-conducta-2026.pdf" target="_blank" rel="noopener">Código de Ética y Conducta</a><a href="politica-privacidad.html">Política de privacidad</a><a href="cookies.html">Política de cookies</a></div>
+        <div><h3 class="fh">Productos</h3><a href="productos.html">Catálogo completo</a><a href="envases-flexibles.html">Bolsas y mangas</a><a href="tuberias.html">Tubos PVC y cañerías</a><a href="conduit.html">Acoples Conduit</a><a href="hidraulico.html">Acoples hidráulicos</a><a href="schedule-40-80.html">Acoples Schedule</a></div>
+        <div><h3 class="fh">Contacto</h3>
+          <a href="mailto:comunicaciones@plastiservi.cl">comunicaciones@plastiservi.cl</a>
+          <a href="tel:+56225536310">Bolsas y mangas: 2 2553 6310</a>
+          <span>Santa Rosa 4525, San Miguel</span>
+          <a href="tel:+56225547602">Tubos PVC y cañerías: 2 2554 7602</a>
+          <a href="tel:+56989530167">+56 9 8953 0167</a>
+          <span>Camino Los Pinos 03496, San Bernardo</span>
+          <a href="https://cl.linkedin.com/in/plastiservi-s-a-836a032b4" target="_blank" rel="noopener">LinkedIn</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 Plastiservi S.A. Todos los derechos reservados.</p>
+      <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-3)"><a href="politica-privacidad.html" style="color:var(--text-3)">Política de Privacidad</a><span>·</span><a href="cookies.html" style="color:var(--text-3)">Cookies</a><span>·</span><a href="https://plastiservi.cl" target="_blank" rel="noopener" style="color:var(--text-3)">Plastiservi →</a></div></div>
+  </div></footer>
+
+  <script src="js/main.js?v=1794227483"></script>
+  <script src="js/catalog.js"></script>
+  <script>
+  var cotSent = false;
+
+  function removeItem(id) {
+    removeCartItem(id);
+    renderCot();
+  }
+
+  function setQty(id, val) {
+    const n = Math.max(1, parseInt(val) || 1);
+    const c = getCart();
+    const item = c.find(i => i.id === id);
+    if (item) { item.qty = n; saveCart(c); }
+    const lbl = document.getElementById('summary-count');
+    if (lbl) lbl.textContent = getCart().reduce((s,i)=>s+(i.qty||1),0) + ' unidades';
+  }
+
+  function renderCot() {
+    const c     = getCart();
+    const wrap  = document.getElementById('cot-wrap');
+    const sub   = document.getElementById('hero-subtitle');
+    const total = c.reduce((s,i) => s+(i.qty||1), 0);
+    if (sub) sub.textContent = total > 0 ? total + (total===1?' producto seleccionado':' productos seleccionados') : 'Sin productos';
+
+    if (!c.length) {
+      wrap.innerHTML = `
+        <div class="cot-empty" style="grid-column:1/-1">
+          <div class="cot-empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </div>
+          <h3>Tu cotización está vacía</h3>
+          <p>Navega los catálogos, selecciona tipo, clase y medida,<br>y agrega los productos que necesitas.</p>
+          <a href="productos.html" class="btn-primary">Explorar catálogo</a>
+        </div>`;
+      return;
+    }
+
+    const itemsHTML = c.map(item => {
+      const safeId = item.id.replace(/[^a-z0-9]/gi, '_');
+      const tags = [item.line, item.variant, item.clase ? 'Clase ' + item.clase : ''].filter(Boolean);
+      const imgSrc = 'img/products/' + item.id.split('_')[0] + '.png';
+      return `
+        <div class="cot-item" id="ci_${safeId}">
+          <div class="cot-item-thumb">
+            <img src="${imgSrc}" alt="${item.product}"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <svg style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="cot-item-info">
+            <div class="cot-item-name">${item.product}</div>
+            <div class="cot-item-meta">${item.size}</div>
+            <div class="cot-item-tags">${tags.map(t=>`<span class="cot-item-tag">${t}</span>`).join('')}</div>
+          </div>
+          <div class="cot-item-controls">
+            <button class="cot-qty-btn" onclick="const i=document.getElementById('cqty_${safeId}');i.value=Math.max(1,+i.value-1);setQty('${item.id}',i.value)">−</button>
+            <input class="cot-qty-input" id="cqty_${safeId}" type="number" value="${item.qty||1}" min="1" max="999" onchange="setQty('${item.id}',this.value)" />
+            <button class="cot-qty-btn" onclick="const i=document.getElementById('cqty_${safeId}');i.value=+i.value+1;setQty('${item.id}',i.value)">+</button>
+            <button class="cot-item-remove" onclick="removeItem('${item.id}')" title="Eliminar">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+
+    wrap.innerHTML = `
+      <div>
+        <div class="cot-items-header">
+          <h2>Productos (${c.length})</h2>
+          <button class="cot-clear-btn" onclick="if(confirm('¿Vaciar cotización?')){clearCart();renderCot();}">Vaciar todo</button>
+        </div>
+        <div class="cot-items">${itemsHTML}</div>
+        <a href="productos.html" class="cot-more-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Agregar más productos
+        </a>
+        <div class="cot-summary-strip">
+          <span class="css-label">Total de unidades</span>
+          <span class="css-value" id="summary-count">${total} unidades</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="cot-form-card">
+          <div class="cot-form-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <div>
+              <h3>Solicitar cotización</h3>
+              <p>Respuesta a la brevedad</p>
+            </div>
+          </div>
+          <div class="cot-form-body">
+            <iframe name="cot_target" id="cot_target" style="display:none" onload="cotLoaded()"></iframe>
+            <form id="cot_form"
+              onsubmit="return cotSend(event)">
+              <input type="hidden" name="mensaje" id="cot_mensaje" />
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div class="cot-row">
+                  <div class="cot-field"><label>Nombre <span class="req">*</span></label><input type="text" name="nombre" placeholder="Tu nombre" required /></div>
+                  <div class="cot-field"><label>Empresa <span class="req">*</span></label><input type="text" name="empresa" placeholder="Razón social" required /></div>
+                </div>
+                <div class="cot-field"><label>Email <span class="req">*</span></label><input type="email" name="email" placeholder="tu@empresa.cl" required /></div>
+                <div class="cot-row">
+                  <div class="cot-field"><label>Teléfono</label><input type="tel" name="telefono" placeholder="+56 9 ..." /></div>
+                  <div class="cot-field"><label>Plazo sugerido</label>
+                    <select name="plazo">
+                      <option value="">Sin preferencia</option>
+                      <option>Urgente (1-3 días)</option>
+                      <option>Esta semana</option>
+                      <option>Este mes</option>
+                      <option>Más de un mes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="cot-field"><label>Comentarios adicionales</label><textarea name="extra" rows="2" placeholder="Proyecto, obra, condiciones especiales..."></textarea></div>
+                <div class="cot-trust">
+                  <div class="cot-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Fabricación propia, más de 42 años de experiencia</div>
+                  <div class="cot-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Respuesta a la brevedad</div>
+                  <div class="cot-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Certificados ISO 9001, ISO 22000 e ISO-CASCO 5</div>
+                </div>
+                <button type="submit" class="cot-submit-btn" id="cot_submit">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  Enviar cotización
+                </button>
+              </div>
+            </form>
+            <div class="cot-success" id="cot_ok">
+              <div class="cot-success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+              </div>
+              <h3>¡Cotización enviada!</h3>
+              <p>Te contactamos con los precios a la brevedad.<br>Revisa tu bandeja de entrada.</p>
+              <a href="productos.html" class="btn-primary" style="margin-top:20px;display:inline-block">Ver más productos</a>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function cotSend(ev) {
+    ev.preventDefault();
+    const form = document.getElementById('cot_form');
+    const d = Object.fromEntries(new FormData(form));
+    const c = getCart();
+    const lines = c.map(i => `• ${i.product}${i.variant?' '+i.variant:''}${i.clase?' Clase '+i.clase:''} — ${i.size} × ${i.qty||1} unid.`);
+    const msg = 'Cotización Plastiservi:\n' + lines.join('\n');
+    const done = () => { form.style.display = 'none'; const ok = document.getElementById('cot_ok'); if (ok) ok.style.display = 'block'; clearCart(); };
+    if (PS_CONFIG.leadEndpoint) {
+      const btn = document.getElementById('cot_submit'); if (btn) { btn.textContent = 'Enviando...'; btn.disabled = true; }
+      fetch(PS_CONFIG.leadEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: d.nombre, empresa: d.empresa, email: d.email, producto: msg, cantidad: d.telefono || '-', linea: 'Tubos y acoples', pagina: 'cotizacion.html' }) })
+        .then(r => { if (!r.ok) throw 0; done(); }).catch(() => { if (btn) { btn.textContent = 'Reintentar'; btn.disabled = false; } });
+    } else {
+      const body = `Nombre: ${d.nombre}\nEmpresa: ${d.empresa}\nEmail: ${d.email}\nTeléfono: ${d.telefono || ''}\n\n${msg}`;
+      location.href = `mailto:${PS_CONFIG.email}?cc=${PS_CONFIG.emailCc}&subject=${encodeURIComponent('[Tubos y acoples] Solicitud de cotización — ' + d.empresa)}&body=${encodeURIComponent(body)}`;
+      done();
+    }
+    return false;
+  }
+
+  function cotSubmit() {
+    cotSent = true;
+    const c = getCart();
+    const lines = c.map(i => `• ${i.product}${i.variant?' '+i.variant:''}${i.clase?' Clase '+i.clase:''} — ${i.size} × ${i.qty||1} unid.`);
+    const el = document.getElementById('cot_mensaje');
+    if (el) el.value = 'Cotización Plastiservi:\n' + lines.join('\n');
+    const btn = document.getElementById('cot_submit');
+    if (btn) { btn.textContent = 'Enviando...'; btn.disabled = true; }
+  }
+
+  function cotLoaded() {
+    if (!cotSent) return;
+    const form = document.getElementById('cot_form');
+    const ok   = document.getElementById('cot_ok');
+    if (form) form.style.display = 'none';
+    if (ok)   ok.style.display   = 'block';
+    clearCart();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderCot();
+    refreshFloat();
+    document.getElementById('quote-float-btn')?.addEventListener('click', () => {});
+  });
+  </script>
+
+  <!-- Minimal float (same page, just keeps the count visible) -->
+  <div class="quote-float" id="quote-float" style="display:none">
+    <button class="quote-float-btn" id="quote-float-btn"></button>
+  </div>
+
+
+</body>
+</html>
