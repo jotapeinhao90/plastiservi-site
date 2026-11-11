@@ -1,7 +1,7 @@
 /* Configuración editable — completar antes de publicar */
 const PS_CONFIG = {
   waNumber: '56972885960',  // WhatsApp de ventas. Vacío = oculta el botón
-  leadEndpoint: '',         // URL del Worker que recibe el formulario. Vacío = abre el correo prellenado
+  leadEndpoint: 'https://plastiservi-leads.bp-juanpix.workers.dev/api/lead', // URL del Worker que recibe el formulario. Vacío = abre el correo prellenado
   email: 'comunicaciones@plastiservi.cl',
   emailCc: '',             // copia (se agrega en el servidor por el Worker, no en el sitio público)
   gaId: ''                  // ID de Google Analytics 4 (G-XXXXXXXXXX). Vacío = sin analítica
