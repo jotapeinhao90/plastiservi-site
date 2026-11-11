@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" /><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" /></noscript>
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
-  <link rel="stylesheet" href="css/style.css?v=1794392842" />
+  <link rel="stylesheet" href="css/style.css?v=1794393156" />
   <style>
     /* ── Hero bar ── */
     .cot-hero {
@@ -324,10 +324,10 @@
       </div>
     </div>
     <div class="footer-bottom"><p>&copy; 2026 Plastiservi S.A. Todos los derechos reservados.</p>
-      <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-3)"><a href="politica-privacidad.html" style="color:var(--text-3)">Política de Privacidad</a><span>·</span><a href="cookies.html" style="color:var(--text-3)">Cookies</a><span>·</span><a href="https://plastiservi.cl" target="_blank" rel="noopener" style="color:var(--text-3)">Plastiservi →</a></div></div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-3)"><a href="politica-privacidad.html" style="color:var(--text-3)">Política de Privacidad</a><span>·</span><a href="cookies.html" style="color:var(--text-3)">Cookies</a></div></div>
   </div></footer>
 
-  <script src="js/main.js?v=1794392842"></script>
+  <script src="js/main.js?v=1794393156"></script>
   <script src="js/catalog.js"></script>
   <script>
   var cotSent = false;
@@ -351,7 +351,7 @@
     const wrap  = document.getElementById('cot-wrap');
     const sub   = document.getElementById('hero-subtitle');
     const total = c.reduce((s,i) => s+(i.qty||1), 0);
-    if (sub) sub.textContent = total > 0 ? total + (total===1?' producto seleccionado':' productos seleccionados') : 'Sin productos';
+    if (sub) sub.textContent = c.length > 0 ? c.length + (c.length===1?' producto':' productos') + ' · ' + total + (total===1?' unidad':' unidades') : 'Sin productos';
 
     if (!c.length) {
       wrap.innerHTML = `

@@ -3,7 +3,7 @@
    ===================== */
 /* Sube este número cada vez que se reemplace una foto en img/products/
    para forzar que el navegador descargue la versión nueva. */
-const IMG_V = 1794392842;
+const IMG_V = 1794393156;
 
 const PRODUCTS = {
 

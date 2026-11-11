@@ -93,7 +93,7 @@ document.querySelectorAll('.prod, .ind, .nos-card').forEach(card => {
    ===================== */
 (function navCart() {
   function getCount() {
-    try { return (JSON.parse(localStorage.getItem('plastiservi_cart'))||[]).reduce((s,i)=>s+(i.qty||1),0); } catch { return 0; }
+    try { return (JSON.parse(localStorage.getItem('plastiservi_cart'))||[]).length; } catch { return 0; }
   }
   function render() {
     const count = getCount();
@@ -163,8 +163,8 @@ function initCatalogFilters(opts) {
 
   function cardHtml(id) {
     const p = PRODUCTS[id];
-    const waMsg = `Hola, quiero cotizar el producto "${p.name}" (${p.line}). Vi el producto en conflex.cl`;
-    const waHref = (typeof conflexWaLink === 'function') ? conflexWaLink(waMsg) : `https://wa.me/56972885960?text=${encodeURIComponent(waMsg)}`;
+    const waMsg = `Hola, quiero cotizar el producto "${p.name}" (${p.line}). Vi el producto en plastiservi.cl`;
+    const waHref = (typeof psWaLink === 'function') ? psWaLink(waMsg) : `https://wa.me/${PS_CONFIG.waNumber}?text=${encodeURIComponent(waMsg)}`;
     return `
       <div class="pl-card fade-3d">
         <a href="producto.html?id=${id}" class="pl-card-link" style="display:contents;text-decoration:none;color:inherit">
@@ -347,7 +347,7 @@ function initCatalogFilters(opts) {
    CTAs flotantes sitewide: WhatsApp + Cotizar
    Popup de captura de leads (se abre solo una vez, a los 3s)
    ===================== */
-(function conflexLeads() {
+(function psLeads() {
   const WA_NUMBER = PS_CONFIG.waNumber;
   const WA_DEFAULT_MSG = 'Hola, quiero cotizar productos Plastiservi.';
   const LEAD_ENDPOINT = PS_CONFIG.leadEndpoint;
@@ -469,9 +469,10 @@ function initCatalogFilters(opts) {
   try {
     if (!sessionStorage.getItem('ps_popup_shown') && !sessionStorage.getItem('ps_lead_sent')) {
       setTimeout(() => {
+        if (window.innerWidth < 760 || document.querySelector('.ps-cookies')) return;
         if (!popup.classList.contains('open')) openPopup();
         sessionStorage.setItem('ps_popup_shown', '1');
-      }, 3000);
+      }, 30000);
     }
   } catch (err) {}
 })();
