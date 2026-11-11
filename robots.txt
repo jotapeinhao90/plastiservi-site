@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /cotizacion.html
+Disallow: /producto.html
+Disallow: /404.html
+
 Sitemap: https://plastiservi.cl/sitemap.xml
