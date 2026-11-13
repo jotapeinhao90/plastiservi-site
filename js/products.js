@@ -3,7 +3,7 @@
    ===================== */
 /* Sube este número cada vez que se reemplace una foto en img/products/
    para forzar que el navegador descargue la versión nueva. */
-const IMG_V = 1794608103;
+const IMG_V = 1794608312;
 
 const PRODUCTS = {
 
@@ -31,7 +31,7 @@ const PRODUCTS = {
   },
   'conduit-tubo-clase4': {
     name: 'Tubería Conduit Clase IV', line: 'Línea Conduit', lineSlug: 'conduit', lineUrl: 'conduit.html',
-    desc: 'Tubo PVC rígido Clase IV (1250N) de diámetro chico, para canalización eléctrica embutida en muros y losas en instalaciones domiciliarias y de baja carga de cables. Se complementa con curvas, coplas y terminales de la línea Conduit.',
+    desc: 'Tubo PVC rígido Clase IV (1250N) de diámetro pequeño, para canalización eléctrica embutida en muros y losas en instalaciones domiciliarias y de baja carga de cables. Se complementa con curvas, coplas y terminales de la línea Conduit.',
     specs: ['Norma NCh 2114 / IEC 61386','PVC rígido autoextinguible','Clase IV — 1250N','16 – 20 mm'],
     hasType:false, hasClass:false,
     sizes:['16mm','20mm']
@@ -242,7 +242,7 @@ const PRODUCTS = {
   },
   'grisuv-copla-cem': {
     name: 'Copla Cementar Gris UV', line: 'Schedule Gris UV', lineSlug: 'schedule-gris-uv', lineUrl: 'schedule-gris-uv.html',
-    desc: 'Unión por adhesivo resistente a UV. Para empalmes en exteriores expuestos al sol con máxima durabilidad.',
+    desc: 'Copla para unión con adhesivo, en PVC con protección UV. Para empalmes en exteriores expuestos al sol con máxima durabilidad.',
     specs: ['Adhesivo + UV','PVC gris','Schedule 40 y 80','1/2" – 8"'],
     hasType:true, hasClass:false, typeLabel:'Schedule',
     types:{'Sch 40':['1/2"','3/4"','1"','1¼"','1½"','2"','2½"','3"','4"','5"','6"','8"'],'Sch 80':['1/2"','3/4"','1"','1¼"','1½"','2"','2½"','3"','4"','5"','6"','8"']}
@@ -302,7 +302,7 @@ const PRODUCTS = {
   },
   'hidraul-tubo-pn16': {
     name: 'Tubería Hidráulica PN-16 / PN-12,5', line: 'Fitting Hidráulico', lineSlug: 'hidraulico', lineUrl: 'hidraulico.html',
-    desc: 'Tubo PVC de alta presión PN-16 y PN-12,5 (12,5 y 16 bar) para tramos cortos de distribución que requieren mayor presión nominal, como arranques de red o conexiones domiciliarias. Compatible con curvas, coplas y reducciones de la línea Fitting Hidráulico.',
+    desc: 'Tubo PVC de alta presión PN-16 y PN-12,5 (16 y 12,5 bar) para tramos cortos de distribución que requieren mayor presión nominal, como arranques de red o conexiones domiciliarias. Compatible con curvas, coplas y reducciones de la línea Fitting Hidráulico.',
     specs: ['Norma NCh 399','PVC rígido presión','PN-16 y PN-12,5','20 – 25 mm'],
     hasType:true, hasClass:false, typeLabel:'Presión nominal (PN)',
     types:{'PN-16':['20mm'],'PN-12,5':['25mm']}
