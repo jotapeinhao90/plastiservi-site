@@ -396,7 +396,7 @@ function initCatalogFilters(opts) {
             <div class="cfx-f"><label>Empresa <span class="req">*</span></label><input type="text" name="empresa" placeholder="Razón social" required /></div>
           </div>
           <div class="cfx-f"><label>Email <span class="req">*</span></label><input type="email" name="email" placeholder="tu@empresa.cl" required /></div>
-          <div class="cfx-f"><label>¿Qué línea te interesa? <span class="req">*</span></label><select name="linea" required aria-label="Línea que te interesa"><option value="">Elige una opción</option><option value="Tubos y acoples">Tubos, acoples y cañerías</option><option value="Bolsas y mangas">Bolsas, mangas y film</option><option value="Reciclaje">Material reciclado / reciclaje</option></select></div>
+          <div class="cfx-f"><label>¿Qué línea te interesa? <span class="req">*</span></label><select name="linea" required aria-label="Línea que te interesa"><option value="">Elige una opción</option><option value="Tubos y fittings">Tubos, fittings y cañerías</option><option value="Bolsas y mangas">Bolsas, mangas y film</option><option value="Reciclaje">Material reciclado / reciclaje</option></select></div>
           <div class="cfx-popup-row">
             <div class="cfx-f"><label>Producto(s) <span class="req">*</span></label><input type="text" name="producto" placeholder="Ej: Bolsas PEBD 40x60 / Codos PVC 110mm" required /></div>
             <div class="cfx-f"><label>Cantidad <span class="req">*</span></label><input type="text" name="cantidad" placeholder="Ej: 200 unidades" required /></div>
@@ -419,7 +419,7 @@ function initCatalogFilters(opts) {
       </div>
     </div>`;
   document.body.appendChild(popup);
-  const LINEAS = { tubos: 'Tubos y acoples', bolsas: 'Bolsas y mangas' };
+  const LINEAS = { tubos: 'Tubos y fittings', bolsas: 'Bolsas y mangas' };
   const pageLine = LINEAS[document.body.dataset.line] || (/reciclaje/.test(location.pathname) ? 'Reciclaje' : '');
   popup.querySelector('[name="linea"]').value = pageLine;
   popup.querySelector('[name="pagina"]').value = location.pathname.split('/').pop() || 'index.html';
@@ -492,7 +492,7 @@ window.addEventListener('load', () => {
     e.preventDefault();
     const popup = document.getElementById('cfx-popup'); if (!popup) return;
     const f = popup.querySelector('[name="producto"]'); if (f && b.dataset.quote) f.value = b.dataset.quote;
-    const ln = { tubos: 'Tubos y acoples', bolsas: 'Bolsas y mangas' }[b.dataset.line]; const sel = popup.querySelector('[name="linea"]'); if (sel && ln) sel.value = ln;
+    const ln = { tubos: 'Tubos y fittings', bolsas: 'Bolsas y mangas' }[b.dataset.line]; const sel = popup.querySelector('[name="linea"]'); if (sel && ln) sel.value = ln;
     popup.classList.add('open'); document.body.style.overflow = 'hidden';
   }));
 });
