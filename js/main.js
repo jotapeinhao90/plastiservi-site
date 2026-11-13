@@ -405,7 +405,7 @@ function initCatalogFilters(opts) {
           <input type="hidden" name="pagina" value="" />
           <div class="cfx-trust-mini">
             <div class="cfx-trust-mini-item">${checkIcon} Más de 42 años de experiencia</div>
-            <div class="cfx-trust-mini-item">${checkIcon} Certificados ISO 9001, ISO 22000 e ISO-CASCO 5</div>
+            <div class="cfx-trust-mini-item">${checkIcon} Certificados ISO 9001 e ISO-CASCO 5</div>
             <div class="cfx-trust-mini-item">${checkIcon} Despacho a todo Chile</div>
           </div>
           <button type="submit" class="cfx-popup-submit" id="cfx-lead-submit">${quoteIcon} Enviar solicitud</button>
