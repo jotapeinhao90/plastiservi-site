@@ -619,3 +619,30 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { const c = 
     if (on) location.href = on.getAttribute('href'); else load().then(() => { run(); const f = box.querySelector('a[data-i]'); if (f) location.href = f.getAttribute('href'); });
   };
 })();
+
+/* v14-js */
+(function () {
+  const line = document.body.dataset.line || (/envases-flexibles/.test(location.pathname) ? 'bolsas' : '');
+  const h1 = document.querySelector('h1'); const prod = /\/tubo-[\w-]+\.html/.test(location.pathname) && h1 ? h1.textContent.trim() : '';
+  const msg = prod ? 'Hola, quiero cotizar ' + prod + ' Plastiservi.' : line === 'tubos' ? 'Hola, quiero cotizar tubos y fittings Plastiservi.' : line === 'bolsas' ? 'Hola, quiero cotizar bolsas y mangas Plastiservi.' : 'Hola, quiero cotizar productos Plastiservi.';
+  const wa = 'https://wa.me/' + PS_CONFIG.waNumber + '?text=' + encodeURIComponent(msg);
+  const tel = line === 'bolsas' ? 'tel:+56225536310' : 'tel:+56989530167';
+  const fw = document.getElementById('cfx-fab-wa'); if (fw && line) fw.href = wa;
+  const fc = document.querySelector('.cfx-fab-call'); if (fc) fc.href = tel;
+  if (document.querySelector('.ps-mbar')) return;
+  const ic = {
+    wa: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.6 1.4 5.1L2 22l5.1-1.3c1.5.8 3.1 1.2 4.9 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3.3.9.9-3.2-.2-.3C3.9 14.8 3.5 13.4 3.5 12c0-4.7 3.8-8.5 8.5-8.5s8.5 3.8 8.5 8.5-3.8 8.5-8.5 8.5zm5.5-5.8c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.5-.8-2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.2-.1-.2-.3-.3-.6-.4z"/></svg>',
+    tel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
+  };
+  const bar = document.createElement('nav'); bar.className = 'ps-mbar'; bar.setAttribute('aria-label', 'Contacto rápido');
+  bar.innerHTML = '<a class="ps-mbar-wa" href="' + wa + '" target="_blank" rel="noopener">' + ic.wa + '<span>WhatsApp</span></a>'
+    + '<a class="ps-mbar-call" href="' + tel + '">' + ic.tel + '<span>Llamar</span></a>'
+    + '<button type="button" class="ps-mbar-quote">' + ic.mail + '<span>Cotizar</span></button>';
+  document.body.appendChild(bar); document.body.classList.add('has-mbar');
+  bar.querySelector('.ps-mbar-quote').addEventListener('click', () => {
+    psTrack('open_quote_form', { page: location.pathname, from: 'mbar' });
+    const b = document.getElementById('cfx-fab-quote'); if (b) b.click(); else location.href = 'contacto.html';
+  });
+})();
+/* /v14-js */
