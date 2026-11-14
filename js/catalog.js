@@ -1,5 +1,5 @@
 /* =====================
-   CONFLEX — Catalog.js
+   PLASTISERVI — Catalog.js
    Quote cart + selector
    ===================== */
 

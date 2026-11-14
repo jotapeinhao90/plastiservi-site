@@ -3,34 +3,34 @@
    ===================== */
 /* Sube este número cada vez que se reemplace una foto en img/products/
    para forzar que el navegador descargue la versión nueva. */
-const IMG_V = 1794679822;
+const IMG_V = 1794681300;
 
 const PRODUCTS = {
 
   /* ---- LÍNEA CONDUIT ---- */
   'conduit-tubo-clase1': {
-    name: 'Tubería Conduit Clase I', line: 'Línea Conduit', lineSlug: 'conduit', lineUrl: 'conduit.html',
+    name: 'Tubería PVC Conduit Clase I', line: 'Línea Conduit', lineSlug: 'conduit', lineUrl: 'conduit.html',
     desc: 'Tubo PVC rígido Clase I (750N, resistencia media-liviana) para canalización eléctrica en trazados de baja exigencia mecánica: interior de losas, muros y ductos protegidos. Se complementa con curvas, coplas y terminales de la línea Conduit.',
     specs: ['Norma NCh 2114 / IEC 61386','PVC rígido autoextinguible','Clase I — 750N','110 mm'],
     hasType:false, hasClass:false,
     sizes:['110mm']
   },
   'conduit-tubo-clase2': {
-    name: 'Tubería Conduit Clase II', line: 'Línea Conduit', lineSlug: 'conduit', lineUrl: 'conduit.html',
+    name: 'Tubería PVC Conduit Clase II', line: 'Línea Conduit', lineSlug: 'conduit', lineUrl: 'conduit.html',
     desc: 'Tubo PVC rígido Clase II para instalaciones eléctricas de exigencia media: losas, muros y canalizaciones embutidas en obra civil e industrial. Se complementa con curvas, coplas y terminales de la línea Conduit.',
     specs: ['Norma NCh 2114 / IEC 61386','PVC rígido autoextinguible','Clase II','40 – 160 mm'],
     hasType:false, hasClass:false,
     sizes:['40mm','50mm','63mm','75mm','90mm','110mm','140mm','160mm']
   },
   'conduit-tubo-clase3': {
-    name: 'Tubería Conduit Clase III', line: 'Línea Conduit', lineSlug: 'conduit', lineUrl: 'conduit.html',
+    name: 'Tubería PVC Conduit Clase III', line: 'Línea Conduit', lineSlug: 'conduit', lineUrl: 'conduit.html',
     desc: 'Tubo PVC rígido Clase III (1250N, resistencia fuerte) para canalización eléctrica subterránea y en zonas de tránsito vehicular o alta exigencia mecánica. Se complementa con curvas, coplas y terminales de la línea Conduit.',
     specs: ['Norma NCh 2114 / IEC 61386','PVC rígido autoextinguible','Clase III — 1250N','25 – 160 mm'],
     hasType:false, hasClass:false,
     sizes:['25mm','32mm','40mm','50mm','63mm','75mm','90mm','110mm','140mm','160mm']
   },
   'conduit-tubo-clase4': {
-    name: 'Tubería Conduit Clase IV', line: 'Línea Conduit', lineSlug: 'conduit', lineUrl: 'conduit.html',
+    name: 'Tubería PVC Conduit Clase IV', line: 'Línea Conduit', lineSlug: 'conduit', lineUrl: 'conduit.html',
     desc: 'Tubo PVC rígido Clase IV (1250N) de diámetro pequeño, para canalización eléctrica embutida en muros y losas en instalaciones domiciliarias y de baja carga de cables. Se complementa con curvas, coplas y terminales de la línea Conduit.',
     specs: ['Norma NCh 2114 / IEC 61386','PVC rígido autoextinguible','Clase IV — 1250N','16 – 20 mm'],
     hasType:false, hasClass:false,
@@ -114,14 +114,14 @@ const PRODUCTS = {
 
   /* ---- FITTING SCHEDULE 40/80 ---- */
   'sch4080-tubo-40': {
-    name: 'Tubería Schedule 40', line: 'Fitting Schedule 40/80', lineSlug: 'schedule-40-80', lineUrl: 'schedule-40-80.html',
+    name: 'Tubería PVC Schedule 40', line: 'Fitting Schedule 40/80', lineSlug: 'schedule-40-80', lineUrl: 'schedule-40-80.html',
     desc: 'Tubo PVC Schedule 40 en color naranja, pared estándar, para instalaciones eléctricas industriales. Compatible con curvas, coplas y terminales Schedule 40/80.',
     specs: ['Norma ASTM D-1785','PVC naranja rígido','Pared estándar','1" – 8"'],
     hasType:false, hasClass:false,
     sizes:['1"','1¼"','1½"','2"','2½"','3"','4"','5"','6"','8"']
   },
   'sch4080-tubo-80': {
-    name: 'Tubería Schedule 80', line: 'Fitting Schedule 40/80', lineSlug: 'schedule-40-80', lineUrl: 'schedule-40-80.html',
+    name: 'Tubería PVC Schedule 80', line: 'Fitting Schedule 40/80', lineSlug: 'schedule-40-80', lineUrl: 'schedule-40-80.html',
     desc: 'Tubo PVC Schedule 80 en color naranja, pared reforzada, mayor resistencia al impacto y a la compresión que el Schedule 40. Para instalaciones eléctricas industriales de alta exigencia. Compatible con curvas, coplas y terminales Schedule 40/80.',
     specs: ['Norma ASTM D-1785','PVC naranja rígido','Pared reforzada','1" – 8"'],
     hasType:false, hasClass:false,
@@ -287,21 +287,21 @@ const PRODUCTS = {
 
   /* ---- FITTING HIDRÁULICO ---- */
   'hidraul-tubo-pn10': {
-    name: 'Tubería Hidráulica PN-10', line: 'Fitting Hidráulico', lineSlug: 'hidraulico', lineUrl: 'hidraulico.html',
+    name: 'Tubería PVC Hidráulica PN-10', line: 'Fitting Hidráulico', lineSlug: 'hidraulico', lineUrl: 'hidraulico.html',
     desc: 'Tubo PVC presión nominal PN-10 (10 bar) para redes de agua potable, riego y distribución industrial de fluidos. Extremo espiga compatible con unión Cementar (adhesivo) o Anger (junta elástica). Se complementa con curvas, coplas y reducciones de la línea Fitting Hidráulico.',
     specs: ['Norma NCh 399','PVC rígido presión','PN-10 (10 bar)','32 – 250 mm'],
     hasType:false, hasClass:false,
     sizes:['32mm','40mm','50mm','63mm','75mm','90mm','110mm','125mm','140mm','160mm','200mm','250mm']
   },
   'hidraul-tubo-pn6': {
-    name: 'Tubería Hidráulica PN-6', line: 'Fitting Hidráulico', lineSlug: 'hidraulico', lineUrl: 'hidraulico.html',
+    name: 'Tubería PVC Hidráulica PN-6', line: 'Fitting Hidráulico', lineSlug: 'hidraulico', lineUrl: 'hidraulico.html',
     desc: 'Tubo PVC presión nominal PN-6 (6 bar) para redes de agua potable, riego y distribución de fluidos donde la exigencia de presión es menor que PN-10. Extremo espiga compatible con unión Cementar o Anger. Se complementa con curvas, coplas y reducciones de la línea Fitting Hidráulico.',
     specs: ['Norma NCh 399','PVC rígido presión','PN-6 (6 bar)','40 – 250 mm'],
     hasType:false, hasClass:false,
     sizes:['40mm','50mm','63mm','75mm','90mm','110mm','125mm','140mm','160mm','200mm','250mm']
   },
   'hidraul-tubo-pn16': {
-    name: 'Tubería Hidráulica PN-16 / PN-12,5', line: 'Fitting Hidráulico', lineSlug: 'hidraulico', lineUrl: 'hidraulico.html',
+    name: 'Tubería PVC Hidráulica PN-16 / PN-12,5', line: 'Fitting Hidráulico', lineSlug: 'hidraulico', lineUrl: 'hidraulico.html',
     desc: 'Tubo PVC de alta presión PN-16 y PN-12,5 (16 y 12,5 bar) para tramos cortos de distribución que requieren mayor presión nominal, como arranques de red o conexiones domiciliarias. Compatible con curvas, coplas y reducciones de la línea Fitting Hidráulico.',
     specs: ['Norma NCh 399','PVC rígido presión','PN-16 y PN-12,5','20 – 25 mm'],
     hasType:true, hasClass:false, typeLabel:'Presión nominal (PN)',
@@ -413,7 +413,7 @@ const PRODUCTS = {
 
   /* ---- TUBERÍA SANITARIA ---- */
   'sanitario-tubo': {
-    name: 'Tubería Sanitaria', line: 'Tubería Sanitaria', lineSlug: 'sanitario', lineUrl: 'productos.html#tuberias',
+    name: 'Tubería PVC Sanitaria Gris', line: 'Tubería Sanitaria', lineSlug: 'sanitario', lineUrl: 'productos.html#tuberias',
     desc: 'Tubo PVC gris para redes de desagüe domiciliario, alcantarillado y evacuación de aguas servidas. Unión por cementar (adhesivo). No apto para agua a presión, solo evacuación por gravedad.',
     specs: ['PVC sanitario gris','Unión cementar','Evacuación por gravedad','40 – 110 mm'],
     hasType:false, hasClass:false,
