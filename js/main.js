@@ -169,8 +169,8 @@ function initCatalogFilters(opts) {
       <div class="pl-card fade-3d">
         <a href="producto.html?id=${id}" class="pl-card-link" style="display:contents;text-decoration:none;color:inherit">
           <div class="pl-photo">
-            <img src="img/products/${id}.png?v=${IMG_V}" alt="${p.name}" loading="lazy"
-              onerror="if(this.src.indexOf('.png')>-1){this.src=this.src.replace('.png','.jpg')}else{this.style.display='none';var ph=this.parentElement.querySelector('.pl-photo-ph');if(ph)ph.style.display='flex'}" />
+            <img src="img/products/${id}.webp?v=${IMG_V}" alt="${p.name}" loading="lazy"
+              onerror="if(this.src.indexOf('.webp')>-1){this.src=this.src.replace('.webp','.png')}else if(this.src.indexOf('.png')>-1){this.src=this.src.replace('.png','.jpg')}else{this.style.display='none';var ph=this.parentElement.querySelector('.pl-photo-ph');if(ph)ph.style.display='flex'}" />
             <div class="pl-photo-ph">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
               <span>Foto próximamente</span>
@@ -457,6 +457,7 @@ function initCatalogFilters(opts) {
         document.getElementById('cfx-popup-form-wrap').style.display = 'none';
         document.getElementById('cfx-popup-ok').classList.add('show');
         try { sessionStorage.setItem('ps_lead_sent', '1'); } catch (err) {}
+        psTrack('generate_lead', { form: 'popup', linea: (leadForm.querySelector('[name="linea"]') || {}).value || '', page: location.pathname });
       })
       .catch(() => {
         errorEl.classList.add('show');
@@ -545,7 +546,7 @@ document.querySelectorAll('form.ps-form').forEach(form => form.addEventListener(
   const d = Object.fromEntries(new FormData(form)); const to = form.dataset.to || PS_CONFIG.email;
   const done = () => { form.querySelectorAll('input,textarea,button,select,label').forEach(x => x.style.display = 'none'); const ok = form.querySelector('.ok'); if (ok) ok.style.display = 'block'; };
   if (PS_CONFIG.leadEndpoint) {
-    fetch(PS_CONFIG.leadEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: d.nombre, empresa: '-', email: d.email, linea: form.dataset.linea || d.linea || '', producto: d.mensaje, cantidad: d.telefono || '-', pagina: location.pathname.split('/').pop(), destino: to }) }).then(r => { if (!r.ok) throw 0; done(); }).catch(() => { const b = form.querySelector('button[type=submit],button'); if (b) { b.disabled = false; b.textContent = 'Reintentar'; } let er = form.querySelector('.ps-form-err'); if (!er) { er = document.createElement('p'); er.className = 'ps-form-err'; er.style.cssText = 'color:#b42318;font-size:14px;margin-top:8px'; form.appendChild(er); } er.innerHTML = 'No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por <a href="https://wa.me/' + PS_CONFIG.waNumber + '" target="_blank" rel="noopener">WhatsApp</a>.'; });
+    fetch(PS_CONFIG.leadEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: d.nombre, empresa: '-', email: d.email, linea: form.dataset.linea || d.linea || '', producto: d.mensaje, cantidad: d.telefono || '-', pagina: location.pathname.split('/').pop(), destino: to }) }).then(r => { if (!r.ok) throw 0; done(); psFormOk(form); }).catch(() => { const b = form.querySelector('button[type=submit],button'); if (b) { b.disabled = false; b.textContent = 'Reintentar'; } let er = form.querySelector('.ps-form-err'); if (!er) { er = document.createElement('p'); er.className = 'ps-form-err'; er.style.cssText = 'color:#b42318;font-size:14px;margin-top:8px'; form.appendChild(er); } er.innerHTML = 'No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por <a href="https://wa.me/' + PS_CONFIG.waNumber + '" target="_blank" rel="noopener">WhatsApp</a>.'; });
   } else {
     const body = `Nombre: ${d.nombre}\nEmail: ${d.email}\nTeléfono: ${d.telefono || ''}\n\n${d.mensaje}`;
     location.href = `mailto:${to}?subject=${encodeURIComponent((d.linea ? '[' + d.linea + '] ' : '') + (form.dataset.subject || 'Contacto web'))}&body=${encodeURIComponent(body)}`; done();
@@ -569,7 +570,7 @@ function psTrack(name, params) { try { if (window.gtag) gtag('event', name, para
   if (v === 'yes') { psLoadAnalytics(); return; }
   if (v) return;
   const b = document.createElement('div'); b.className = 'ps-cookies'; b.setAttribute('role', 'dialog'); b.setAttribute('aria-label', 'Aviso de cookies');
-  b.innerHTML = '<p>Usamos cookies para que el sitio funcione y, si lo permites, para medir su uso. <a href="cookies.html">Más información</a></p><div><button type="button" data-v="no" class="alt">Solo necesarias</button><button type="button" data-v="yes">Aceptar</button></div>';
+  b.innerHTML = '<p>Usamos cookies para que el sitio funcione y, si lo permites, para medir su uso. <a href="cookies.html">Ver política de cookies</a></p><div><button type="button" data-v="no" class="alt">Solo necesarias</button><button type="button" data-v="yes">Aceptar</button></div>';
   document.body.appendChild(b);
   b.addEventListener('click', e => { const x = e.target.closest('button'); if (!x) return; try { localStorage.setItem('ps_cookies', x.dataset.v); } catch (er) {} if (x.dataset.v === 'yes') psLoadAnalytics(); b.remove(); });
 })();
@@ -577,12 +578,14 @@ function psTrack(name, params) { try { if (window.gtag) gtag('event', name, para
 /* Eventos de conversión (se envían solo si hay analítica cargada) */
 document.addEventListener('click', e => {
   const a = e.target.closest('a,button'); if (!a) return; const h = a.getAttribute('href') || '';
-  if (h.includes('wa.me')) psTrack('click_whatsapp', { page: location.pathname });
-  else if (h.startsWith('tel:')) psTrack('click_phone', { page: location.pathname });
-  else if (h.startsWith('mailto:')) psTrack('click_email', { page: location.pathname });
-  else if (a.hasAttribute('data-quote')) psTrack('open_quote_form', { page: location.pathname });
+  const p = { page: location.pathname, from: psFrom(a), linea: document.body.dataset.line || '' };
+  if (h.includes('wa.me')) psTrack('click_whatsapp', p);
+  else if (h.startsWith('tel:')) psTrack('click_phone', Object.assign(p, { phone: h.slice(4) }));
+  else if (h.startsWith('mailto:')) psTrack('click_email', p);
+  else if (a.hasAttribute('data-quote')) psTrack('open_quote_form', p);
+  else if (a.id === 'cfx-fab-quote' && e.isTrusted) psTrack('open_quote_form', p);
 }, true);
-document.addEventListener('submit', e => psTrack('generate_lead', { form: e.target.id || e.target.className, page: location.pathname }), true);
+/* generate_lead se envía solo cuando el Worker confirma el envío (ver v17: popup, .ps-form y cotizacion.html) */
 
 /* Anti-spam: campo trampa en los formularios de la página */
 document.querySelectorAll('form.ps-form').forEach(f => { const i = document.createElement('input'); i.type = 'text'; i.name = '_honey'; i.tabIndex = -1; i.autocomplete = 'off'; i.style.display = 'none'; i.setAttribute('aria-hidden', 'true'); f.appendChild(i); });
@@ -641,7 +644,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { const c = 
     + '<button type="button" class="ps-mbar-quote">' + ic.mail + '<span>Cotizar</span></button>';
   document.body.appendChild(bar); document.body.classList.add('has-mbar');
   bar.querySelector('.ps-mbar-quote').addEventListener('click', () => {
-    psTrack('open_quote_form', { page: location.pathname, from: 'mbar' });
+    psTrack('open_quote_form', { page: location.pathname, from: 'barra_movil', linea: document.body.dataset.line || '' });
     const b = document.getElementById('cfx-fab-quote'); if (b) b.click(); else location.href = 'contacto.html';
   });
 })();
@@ -720,3 +723,25 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { const c = 
   }, true);
 })();
 /* /v16-js */
+
+/* v17-js */
+/* Origen del clic para las conversiones (barra móvil, botón flotante, encabezado, hero, pie…) */
+function psFrom(a) {
+  if (a.closest('.ps-mbar')) return 'barra_movil';
+  if (a.closest('#cfx-popup')) return 'popup';
+  if (a.matches('.cfx-fab,.cfx-fab-call,#cfx-fab-wa') || a.closest('.cfx-fab')) return 'flotante';
+  if (a.closest('header')) return 'encabezado';
+  if (a.closest('footer')) return 'pie';
+  if (a.closest('.hero4,.page-hero,.pd2,.catalog-hero,.rc-hero,.bf-hero,.ct-hero,.ns-hero')) return 'hero';
+  if (a.closest('.ps-cookies')) return 'cookies';
+  return 'contenido';
+}
+/* Éxito real de un .ps-form: contacto y reciclaje son leads; reclamos se mide aparte (no es conversión) */
+function psFormOk(form) {
+  const reclamo = /reclamo/i.test(form.dataset.subject || '') || form.dataset.to === 'reclamos@plastiservi.cl';
+  const name = reclamo ? 'reclamos' : ((location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index');
+  const p = { form: name, linea: form.dataset.linea || '', page: location.pathname };
+  psTrack('form_submit_success', p);
+  if (!reclamo) psTrack('generate_lead', p);
+}
+/* /v17-js */
