@@ -543,7 +543,7 @@ function loadVideo() {
 document.querySelectorAll('form.ps-form').forEach(form => form.addEventListener('submit', e => {
   e.preventDefault();
   const d = Object.fromEntries(new FormData(form)); const to = form.dataset.to || PS_CONFIG.email;
-  const done = () => { form.querySelectorAll('input,textarea,button,select').forEach(x => x.style.display = 'none'); const ok = form.querySelector('.ok'); if (ok) ok.style.display = 'block'; };
+  const done = () => { form.querySelectorAll('input,textarea,button,select,label').forEach(x => x.style.display = 'none'); const ok = form.querySelector('.ok'); if (ok) ok.style.display = 'block'; };
   if (PS_CONFIG.leadEndpoint) {
     fetch(PS_CONFIG.leadEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: d.nombre, empresa: '-', email: d.email, linea: form.dataset.linea || d.linea || '', producto: d.mensaje, cantidad: d.telefono || '-', pagina: location.pathname.split('/').pop(), destino: to }) }).then(r => { if (!r.ok) throw 0; done(); }).catch(() => { const b = form.querySelector('button[type=submit],button'); if (b) { b.disabled = false; b.textContent = 'Reintentar'; } let er = form.querySelector('.ps-form-err'); if (!er) { er = document.createElement('p'); er.className = 'ps-form-err'; er.style.cssText = 'color:#b42318;font-size:14px;margin-top:8px'; form.appendChild(er); } er.innerHTML = 'No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por <a href="https://wa.me/' + PS_CONFIG.waNumber + '" target="_blank" rel="noopener">WhatsApp</a>.'; });
   } else {
@@ -702,3 +702,21 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { const c = 
   });
 })();
 /* /v15-js */
+
+/* v16-js */
+(function () {
+  /* Reciclaje: la barra móvil y el botón flotante de WhatsApp hablan de reciclaje */
+  if (document.querySelector('.rc-hero')) {
+    const msg = 'Hola, les escribo por reciclaje (vender plástico o comprar material reciclado).';
+    document.querySelectorAll('.ps-mbar-wa, #cfx-fab-wa').forEach(a => { a.href = 'https://wa.me/' + PS_CONFIG.waNumber + '?text=' + encodeURIComponent(msg); });
+  }
+  /* Formulario de reciclaje: el motivo (vender / comprar) viaja al inicio del mensaje, sin cambiar lo que se ve */
+  document.addEventListener('submit', e => {
+    const f = e.target; if (!f.matches || !f.matches('form.ps-form')) return;
+    const mo = f.querySelector('[name="motivo"]'), ta = f.querySelector('[name="mensaje"]');
+    if (!mo || !ta || !mo.value) return;
+    const orig = ta.value; ta.value = '[' + mo.value + '] ' + orig;
+    setTimeout(() => { ta.value = orig; }, 0);
+  }, true);
+})();
+/* /v16-js */
