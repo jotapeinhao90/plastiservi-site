@@ -363,8 +363,8 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           </div>
           <h3>Tu cotización está vacía</h3>
-          <p>Navega los catálogos, selecciona tipo, clase y medida,<br>y agrega los productos que necesitas.</p>
-          <a href="productos.html" class="btn-primary">Explorar catálogo</a>
+          <p>Elige un tubo o fitting, selecciona la medida y agrégalo a tu cotización.<br>O escríbenos directo con lo que necesitas.</p>
+          <div class="cot-empty-btns"><a href="tuberias.html#catalogo" class="btn-primary">Ver tubos y fittings</a><a href="https://wa.me/56972885960?text=Hola%2C%20quiero%20cotizar%20tubos%20y%20fittings%20Plastiservi.%0AProducto%20y%20medida%3A%20%0ACantidad%3A%20" class="cot-wa-btn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.5-.8-2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.2-.1-.2-.3-.3-.6-.4z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.6 1.4 5.1L2 22l5.1-1.3c1.5.8 3.1 1.2 4.9 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3.3.9.9-3.2-.2-.3C3.9 14.8 3.5 13.4 3.5 12c0-4.7 3.8-8.5 8.5-8.5s8.5 3.8 8.5 8.5-3.8 8.5-8.5 8.5z"/></svg>Cotizar por WhatsApp</a></div>
         </div>`;
       return;
     }
@@ -434,7 +434,7 @@
                 </div>
                 <div class="cot-field"><label>Email <span class="req">*</span></label><input type="email" name="email" placeholder="tu@empresa.cl" required /></div>
                 <div class="cot-row">
-                  <div class="cot-field"><label>Teléfono</label><input type="tel" name="telefono" placeholder="+56 9 ..." /></div>
+                  <div class="cot-field"><label>Teléfono / WhatsApp</label><input type="tel" name="telefono" placeholder="+56 9 ..." autocomplete="tel" /></div>
                   <div class="cot-field"><label>Plazo sugerido</label>
                     <select name="plazo">
                       <option value="">Sin preferencia</option>
@@ -455,6 +455,7 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                   Enviar cotización
                 </button>
+                <a href="#" class="cot-wa-btn" id="cot_wa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.5-.8-2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.2-.1-.2-.3-.3-.6-.4z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.6 1.4 5.1L2 22l5.1-1.3c1.5.8 3.1 1.2 4.9 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3.3.9.9-3.2-.2-.3C3.9 14.8 3.5 13.4 3.5 12c0-4.7 3.8-8.5 8.5-8.5s8.5 3.8 8.5 8.5-3.8 8.5-8.5 8.5z"/></svg>Enviar la lista por WhatsApp</a>
               </div>
             </form>
             <div class="cot-success" id="cot_ok">
@@ -476,7 +477,8 @@
     const d = Object.fromEntries(new FormData(form));
     const c = getCart();
     const lines = c.map(i => `• ${i.product}${i.variant?' '+i.variant:''}${i.clase?' Clase '+i.clase:''} — ${i.size} × ${i.qty||1} unid.`);
-    const msg = 'Cotización Plastiservi:\n' + lines.join('\n');
+    const extra = [d.telefono ? 'Teléfono: ' + d.telefono : '', d.plazo ? 'Plazo sugerido: ' + d.plazo : '', d.extra ? 'Comentarios: ' + d.extra : ''].filter(Boolean);
+    const msg = 'Cotización Plastiservi:\n' + lines.join('\n') + (extra.length ? '\n\n' + extra.join('\n') : '');
     const done = () => { form.style.display = 'none'; const ok = document.getElementById('cot_ok'); if (ok) ok.style.display = 'block'; clearCart(); };
     if (PS_CONFIG.leadEndpoint) {
       const btn = document.getElementById('cot_submit'); if (btn) { btn.textContent = 'Enviando...'; btn.disabled = true; }

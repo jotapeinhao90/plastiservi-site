@@ -646,3 +646,59 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { const c = 
   });
 })();
 /* /v14-js */
+
+/* v15-js */
+(function () {
+  const path = location.pathname;
+  /* Fichas de tubos: la barra móvil y el botón flotante usan el mismo WhatsApp del producto; "Cotizar" precarga el producto */
+  const pdWa = document.querySelector('.pd3-cta .pd3-wa');
+  if (pdWa) {
+    document.querySelectorAll('.ps-mbar-wa, #cfx-fab-wa').forEach(a => { a.href = pdWa.href; });
+    const qb = document.querySelector('.ps-mbar-quote'); const pq = document.querySelector('.pd3-quote');
+    if (qb && pq) qb.addEventListener('click', () => {
+      const f = document.querySelector('#cfx-popup [name="producto"]'); if (f && !f.value) f.value = pq.dataset.quote;
+    });
+  }
+  /* producto.html: preselección desde la ficha (?tipo=…&medida=…), WhatsApp con la medida elegida y acceso directo a la cotización */
+  if (/producto\.html$/.test(path) || document.getElementById('pd-wrap')) {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(() => {
+      const wrap = document.getElementById('pd-wrap'); if (!wrap || typeof PRODUCTS === 'undefined') return;
+      const qs = new URLSearchParams(location.search); const prod = PRODUCTS[qs.get('id')]; if (!prod) return;
+      const tipo = qs.get('tipo'), medida = qs.get('medida');
+      if (tipo) { const tb = [...wrap.querySelectorAll('.cp-type-btn')].find(b => b.dataset.type === tipo); if (tb) tb.click(); }
+      if (medida) { const sb = [...wrap.querySelectorAll('.cp-size')].find(b => b.textContent.trim() === medida); if (sb) sb.click(); }
+      const wa = document.getElementById('pd-wa-quick');
+      const upd = () => {
+        if (!wa || typeof psWaLink !== 'function') return;
+        const t = wrap.querySelector('.cp-type-btn.active'), s = wrap.querySelector('.cp-size.sel'), q = wrap.querySelector('.cp-qty-input');
+        const parts = [prod.name, t ? t.dataset.type : '', s ? s.textContent.trim() : ''].filter(Boolean).join(' · ');
+        wa.href = psWaLink('Hola, quiero cotizar ' + parts + ' (' + prod.line + '). Cantidad: ' + (q ? q.value : 1) + ' unidades. Vi el producto en plastiservi.cl');
+      };
+      wrap.addEventListener('click', e => { if (e.target.closest('.cp-size,.cp-type-btn,.cp-qty-btn')) setTimeout(upd, 20); });
+      wrap.addEventListener('input', () => setTimeout(upd, 20));
+      upd();
+      const act = wrap.querySelector('.cp-action');
+      if (act && !wrap.querySelector('.pd3-added')) {
+        const box = document.createElement('div'); box.className = 'pd3-added'; box.setAttribute('role', 'status'); box.setAttribute('aria-live', 'polite');
+        act.after(box);
+        const show = () => {
+          const n = (typeof getCart === 'function' ? getCart() : []).length; if (!n) { box.innerHTML = ''; return; }
+          box.innerHTML = '<span>Tienes ' + n + (n === 1 ? ' producto' : ' productos') + ' en tu cotización.</span><a href="cotizacion.html">Ver y enviar cotización →</a>';
+        };
+        wrap.addEventListener('click', e => { if (e.target.closest('.cp-add-btn')) setTimeout(show, 30); });
+        show();
+      }
+    }, 0));
+  }
+  /* cotizacion.html: enviar la lista del carrito por WhatsApp */
+  document.addEventListener('click', e => {
+    const a = e.target.closest('#cot_wa'); if (!a || typeof getCart !== 'function') return;
+    const c = getCart(); const f = document.getElementById('cot_form'); const d = f ? Object.fromEntries(new FormData(f)) : {};
+    const lines = c.map(i => '• ' + i.product + (i.variant ? ' ' + i.variant : '') + (i.clase ? ' Clase ' + i.clase : '') + ' — ' + i.size + ' × ' + (i.qty || 1) + ' unid.');
+    const who = [d.nombre, d.empresa].filter(Boolean).join(', ');
+    const extra = [d.plazo ? 'Plazo sugerido: ' + d.plazo : '', d.extra ? 'Comentarios: ' + d.extra : ''].filter(Boolean);
+    a.href = 'https://wa.me/' + PS_CONFIG.waNumber + '?text=' + encodeURIComponent('Hola, quiero cotizar' + (who ? ' (' + who + ')' : '') + ':\n' + lines.join('\n') + (extra.length ? '\n\n' + extra.join('\n') : ''));
+    psTrack('click_whatsapp', { page: path, from: 'cotizacion_lista' });
+  });
+})();
+/* /v15-js */
