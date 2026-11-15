@@ -4,7 +4,10 @@ const PS_CONFIG = {
   leadEndpoint: 'https://plastiservi-leads.bp-juanpix.workers.dev/api/lead', // URL del Worker que recibe el formulario. Vacío = abre el correo prellenado
   email: 'comunicaciones@plastiservi.cl',
   emailCc: '',             // copia (se agrega en el servidor por el Worker, no en el sitio público)
-  gaId: ''                  // ID de Google Analytics 4 (G-XXXXXXXXXX). Vacío = sin analítica
+  gaId: '',                  // ID de Google Analytics 4 (G-XXXXXXXXXX). Vacío = sin analítica
+  adsId: 'AW-18395458623',              // Google Ads (cuenta de la empresa). Vacío = sin conversiones
+  adsLeadLabel: 'VXF0CMXrsuMcEL_Y0cNE', // conversión: formulario enviado
+  adsWaLabel: 'YHScCMe8muccEL_Y0cNE'    // conversión: clic en WhatsApp
 };
 function psOpenQuoteFallback() {}
 
@@ -558,21 +561,42 @@ document.querySelectorAll('form.ps-form').forEach(form => form.addEventListener(
   a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
   document.body.appendChild(a);
 })();
-/* Aviso de cookies con consentimiento (la analítica solo se carga si se acepta) */
-function psLoadAnalytics() {
-  if (!PS_CONFIG.gaId || window.__psGa) return; window.__psGa = 1;
-  const s = document.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + PS_CONFIG.gaId; document.head.appendChild(s);
-  window.dataLayer = window.dataLayer || []; window.gtag = function () { dataLayer.push(arguments); }; gtag('js', new Date()); gtag('config', PS_CONFIG.gaId);
+/* Aviso de cookies + Google (modo de consentimiento v2): gtag se carga siempre con almacenamiento
+   DENEGADO por defecto (sin cookies, solo señales anónimas); al "Aceptar" se habilitan analítica y anuncios. */
+function psConsent(granted) {
+  const v = granted ? 'granted' : 'denied';
+  return { ad_storage: v, analytics_storage: v, ad_user_data: v, ad_personalization: v };
 }
-function psTrack(name, params) { try { if (window.gtag) gtag('event', name, params || {}); } catch (e) {} }
+function psLoadAnalytics(granted) {
+  const ids = [PS_CONFIG.gaId, PS_CONFIG.adsId].filter(Boolean);
+  if (!ids.length) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function () { dataLayer.push(arguments); };
+  if (window.__psGa) { gtag('consent', 'update', psConsent(granted)); return; }
+  window.__psGa = 1;
+  gtag('consent', 'default', psConsent(granted));
+  const s = document.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ids[0]; document.head.appendChild(s);
+  gtag('js', new Date());
+  ids.forEach(id => gtag('config', id));
+}
+/* Conversiones de Google Ads: formulario enviado y clic en WhatsApp */
+const PS_ADS_CONV = { generate_lead: 'adsLeadLabel', click_whatsapp: 'adsWaLabel' };
+function psTrack(name, params) {
+  try {
+    if (!window.gtag) return;
+    gtag('event', name, params || {});
+    const k = PS_ADS_CONV[name];
+    if (k && PS_CONFIG.adsId && PS_CONFIG[k]) gtag('event', 'conversion', { send_to: PS_CONFIG.adsId + '/' + PS_CONFIG[k] });
+  } catch (e) {}
+}
 (function () {
   let v = null; try { v = localStorage.getItem('ps_cookies'); } catch (e) {}
-  if (v === 'yes') { psLoadAnalytics(); return; }
+  psLoadAnalytics(v === 'yes');
   if (v) return;
   const b = document.createElement('div'); b.className = 'ps-cookies'; b.setAttribute('role', 'dialog'); b.setAttribute('aria-label', 'Aviso de cookies');
-  b.innerHTML = '<p>Usamos cookies para que el sitio funcione y, si lo permites, para medir su uso. <a href="cookies.html">Ver política de cookies</a></p><div><button type="button" data-v="no" class="alt">Solo necesarias</button><button type="button" data-v="yes">Aceptar</button></div>';
+  b.innerHTML = '<p>Usamos cookies para que el sitio funcione y, si lo permites, para medir su uso y el resultado de nuestros anuncios en Google. <a href="cookies.html">Ver política de cookies</a></p><div><button type="button" data-v="no" class="alt">Solo necesarias</button><button type="button" data-v="yes">Aceptar</button></div>';
   document.body.appendChild(b);
-  b.addEventListener('click', e => { const x = e.target.closest('button'); if (!x) return; try { localStorage.setItem('ps_cookies', x.dataset.v); } catch (er) {} if (x.dataset.v === 'yes') psLoadAnalytics(); b.remove(); });
+  b.addEventListener('click', e => { const x = e.target.closest('button'); if (!x) return; try { localStorage.setItem('ps_cookies', x.dataset.v); } catch (er) {} psLoadAnalytics(x.dataset.v === 'yes'); b.remove(); });
 })();
 
 /* Eventos de conversión (se envían solo si hay analítica cargada) */
